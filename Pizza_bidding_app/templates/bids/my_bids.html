@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}My Bids{% endblock %}
+
+{% block content %}
+
+<div class="card">
+    <h1>My Bids</h1>
+
+    <p>
+        Your bids are private. Other providers cannot see them.
+    </p>
+</div>
+
+{% if bids %}
+
+<table>
+    <tr>
+        <th>Season</th>
+        <th>Game</th>
+        <th>Opponent</th>
+        <th>Status</th>
+        <th>Total</th>
+        <th>Submitted</th>
+    </tr>
+
+    {% for bid in bids %}
+
+    <tr>
+        <td>
+            {{ bid.game.season.name }}
+            ({{ bid.game.season.year }})
+        </td>
+
+        <td>
+            {{ bid.game.game_number }}
+        </td>
+
+        <td>
+            {{ bid.game.opponent }}
+        </td>
+
+        <td>
+            {{ bid.get_status_display }}
+        </td>
+
+        <td>
+            ${{ bid.total }}
+        </td>
+
+        <td>
+            {% if bid.submitted_at %}
+                {{ bid.submitted_at|date:"F j, Y at g:i A" }}
+            {% else %}
+                —
+            {% endif %}
+        </td>
+    </tr>
+
+    {% endfor %}
+</table>
+
+{% else %}
+
+<div class="card">
+    <p>No bids submitted yet.</p>
+</div>
+
+{% endif %}
+
+{% endblock %}
