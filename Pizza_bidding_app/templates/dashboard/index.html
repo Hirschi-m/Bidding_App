@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Administrator Dashboard{% endblock %}
+{% block content %}
+<div class="card">
+  <h1>Administrator Bidding Dashboard</h1>
+  <p>Only authorized staff can see competing provider bids.</p>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Season</th>
+      <th>Games</th>
+      <th>Invited / Accepted</th>
+      <th>Submitted Bids</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for row in season_rows %}
+    <tr>
+      <td><strong>{{ row.season.name }} ({{ row.season.year }})</strong></td>
+      <td>{{ row.game_count }}</td>
+      <td>{{ row.providers }}</td>
+      <td>{{ row.bid_count }}</td>
+      <td><a class="button" href="{% url 'admin_season_dashboard' row.season.id %}">View Season</a></td>
+    </tr>
+  {% empty %}
+    <tr><td colspan="5">No seasons have been created.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

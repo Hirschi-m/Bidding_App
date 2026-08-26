@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block title %}{{ season.name }} Dashboard{% endblock %}
+{% block content %}
+<div class="card">
+  <p><a href="{% url 'admin_dashboard' %}">← All Seasons</a></p>
+  <h1>{{ season.name }} — {{ season.year }}</h1>
+  <p><strong>Pizza budget/game:</strong> ${{ season.pizza_budget_per_game }}</p>
+  <p><strong>Season budget:</strong> ${{ season.season_budget }}</p>
+  <p><strong>Bid window:</strong> {{ season.bid_open }} through {{ season.bid_close }}</p>
+  <p><strong>Status:</strong> {% if season.bidding_open %}Open{% else %}Closed{% endif %}</p>
+</div>
+
+<div class="card">
+  <h2>Provider Participation</h2>
+  <table>
+    <thead><tr><th>Provider</th><th>Email</th><th>Invitation</th></tr></thead>
+    <tbody>
+    {% for invitation in invitations %}
+      <tr>
+        <td>{{ invitation.provider.company_name }}</td>
+        <td>{{ invitation.provider.email }}</td>
+        <td>
+          {% if invitation.accepted_at %}Accepted
+          {% elif invitation.sent_at %}Sent
+          {% else %}Not sent{% endif %}
+        </td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="3">No providers invited.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<div class="card">
+  <h2>Season Comparison</h2>
+  <p>This totals the submitted per-game bids from each provider. It is a comparison aid, not a season-contract bid.</p>
+  <table>
+    <thead><tr><th>Provider</th><th>Games Bid</th><th>Total of Submitted Games</th></tr></thead>
+    <tbody>
+    {% for row in season_bids %}
+      <tr>
+        <td>{{ row.provider.company_name }}</td>
+        <td>{{ row.bid_count }} / {{ season.number_of_games }}</td>
+        <td>{% if row.bid_count %}${{ row.total }}{% else %}—{% endif %}</td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="3">No provider invitations.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<h2>Game-by-Game Sealed Bids</h2>
+{% for row in game_rows %}
+<div class="card">
+  <h3>Game {{ row.game.game_number }} — {{ row.game.opponent }}</h3>
+  <p>{{ row.game.date }} · {{ row.game.pizza_quantity }} pizzas</p>
+  <p><strong>Budget:</strong> ${{ row.budget }}
+    {% if row.lowest %} · <strong>Lowest:</strong> ${{ row.lowest }} · <strong>Average:</strong> ${{ row.average|floatformat:2 }}{% endif %}
+  </p>
+  <table>
+    <thead>
+      <tr><th>Rank</th><th>Provider</th><th>Subtotal</th><th>Delivery</th><th>Tax</th><th>Discount</th><th>Total</th><th>Submitted</th></tr>
+    </thead>
+    <tbody>
+    {% for bid in row.bids %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td><strong>{{ bid.provider.company_name }}</strong></td>
+        <td>${{ bid.subtotal }}</td>
+        <td>${{ bid.delivery_fee }}</td>
+        <td>${{ bid.tax }}</td>
+        <td>${{ bid.discount }}</td>
+        <td><strong>${{ bid.total }}</strong></td>
+        <td>{{ bid.submitted_at }}</td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="8">No submitted bids for this game.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% if row.bids %}
+    <p><strong>Administrator notes:</strong> Review delivery terms and bid notes before awarding.</p>
+  {% endif %}
+</div>
+{% empty %}
+<div class="card">No games have been created for this season.</div>
+{% endfor %}
+{% endblock %}
