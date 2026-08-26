@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Accept Invitation{% endblock %}
+{% block content %}
+<div class="card">
+  <h1>Activate Your Provider Account</h1>
+  <p><strong>Company:</strong> {{ invitation.provider.company_name }}</p>
+  <p><strong>Contact:</strong> {{ invitation.provider.contact_name }}</p>
+  <p><strong>Season:</strong> {{ invitation.season.name }} ({{ invitation.season.year }})</p>
+  <p><strong>Email:</strong> {{ invitation.provider.email }}</p>
+  <p>Create a password to access the private pizza bidding portal.</p>
+
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="button" type="submit">Activate Account</button>
+  </form>
+</div>
+{% endblock %}

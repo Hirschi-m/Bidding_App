@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}Submit Bid{% endblock %}
+
+{% block content %}
+
+<div class="card">
+    <h1>Sealed Bid — Game {{ game.game_number }}</h1>
+
+    <h2>{{ game.opponent }}</h2>
+
+    <p>
+        {{ game.date }} · {{ game.pizza_quantity }} pizzas
+    </p>
+
+    <p>
+        <strong>Budget reference:</strong>
+        ${{ game.season.pizza_budget_per_game }}
+    </p>
+
+    <p>
+        <strong>Bid deadline:</strong>
+        {{ game.season.bid_close|date:"F j, Y at g:i A" }}
+    </p>
+</div>
+
+
+{% if submitted %}
+
+<div class="card">
+    <h2>Bid Already Submitted</h2>
+
+    <p>
+        Your sealed bid for this game has already been submitted.
+    </p>
+
+    <p>
+        <strong>Total:</strong>
+        ${{ bid.total }}
+    </p>
+
+    <p>
+        <strong>Submitted:</strong>
+        {{ bid.submitted_at|date:"F j, Y at g:i A" }}
+    </p>
+
+    <p>
+        <strong>Status:</strong>
+        {{ bid.get_status_display }}
+    </p>
+
+    <p>
+        Your bid is locked and cannot be changed.
+    </p>
+
+    <p>
+        <a class="button" href="{% url 'my_bids' %}">
+            View My Bids
+        </a>
+    </p>
+</div>
+
+{% else %}
+
+<div class="card">
+    <h2>Enter Your Bid</h2>
+
+    <p>
+        Enter your complete price for the game below.
+        Your bid will remain private from other providers.
+    </p>
+
+    <form method="post">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <button class="button" type="submit">
+            Submit Sealed Bid
+        </button>
+    </form>
+</div>
+
+{% endif %}
+
+{% endblock %}

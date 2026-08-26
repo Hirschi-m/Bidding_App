@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Pizza Bid{% endblock %}</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 1150px; margin: 0 auto; padding: 2rem; background: #f7f7f7; color: #222; }
+    nav { display:flex; justify-content:space-between; margin-bottom:2rem; gap:1rem; }
+    nav a { margin-right:1rem; }
+    .card { background:white; padding:1.5rem; border-radius:12px; margin-bottom:1rem; box-shadow:0 1px 5px #ddd; overflow-x:auto; }
+    table { width:100%; border-collapse:collapse; background:white; }
+    th, td { padding:.75rem; border-bottom:1px solid #ddd; text-align:left; white-space:nowrap; }
+    .button { display:inline-block; padding:.65rem 1rem; border-radius:8px; background:#222; color:white; text-decoration:none; border:0; cursor:pointer; }
+    input, textarea { width:100%; max-width:500px; padding:.6rem; margin:.25rem 0 1rem; box-sizing:border-box; }
+    .message { padding:.75rem; background:#e9f7ef; border-radius:8px; margin-bottom:1rem; }
+  </style>
+</head>
+<body>
+<nav>
+  <div><a href="{% url 'home' %}"><strong>Pizza Bid</strong></a></div>
+  <div>
+    {% if user.is_staff %}
+      <a href="{% url 'admin_dashboard' %}">Bid Dashboard</a>
+      <a href="/admin/">Django Admin</a>
+      <a href="{% url 'logout' %}">Log out</a>
+    {% elif user.is_authenticated %}
+      <a href="{% url 'my_bids' %}">My Bids</a>
+      <a href="{% url 'logout' %}">Log out</a>
+    {% else %}
+      <a href="{% url 'login' %}">Provider Login</a>
+    {% endif %}
+  </div>
+</nav>
+{% for message in messages %}<div class="message">{{ message }}</div>{% endfor %}
+{% block content %}{% endblock %}
+</body>
+</html>
