@@ -3,7 +3,7 @@ services:
     name: pizza-bid-app
     runtime: python
     buildCommand: ./build.sh
-    startCommand: gunicorn pizza_bid.wsgi:application
+    startCommand: gunicorn Pizza_bidding_app.pizza_bid.wsgi:application
     envVars:
       - key: DATABASE_URL
         fromDatabase:
@@ -17,3 +17,4 @@ services:
         value: ".onrender.com"
 databases:
   - name: pizza-bid-db
+
