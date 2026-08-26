@@ -1,0 +1,33 @@
+# Django (Python) .gitignore optimized for Bidding_App
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Database (Crucial for untracking db.sqlite3)
+db.sqlite3
+db.sqlite3-journal
+
+# Environments and Secrets
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Media and static uploads
+media/
+staticfiles/
+
+# OS files
+.DS_Store
+.DS_Store?
+Thumbs.db
+ehthumbs.db
+
+# IDEs and Editors
+.idea/
+.vscode/
+*.swp
+*.swo
